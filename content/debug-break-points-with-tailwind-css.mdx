@@ -1,0 +1,51 @@
+---
+type: 'snippet'
+title: 'Debug breakpoints with Tailwind CSS'
+publishedAt: '2020-01-01T11:11:11.000Z'
+image: '/assets/blog/post/preview.jpg'
+categories: ['Responsive']
+technologies: ['Tailwind CSS', 'React', 'Next.js']
+---
+
+This snippet creates a small debug element pinned to the bottom left corner of the window and displays the current breakpoint. **It's useful when you create interfaces from scratch**. _— only for pixel perfect lovers_ 🤓
+
+<Step number={1} title="Create component" />
+
+You can edit the <code class="cyan">position</code> easily
+
+```jsx title="@/components/DebugBreakpoint.tsx" /left-0 bottom-0/#cyan
+export const DebugBreakpoint = () => (
+  <div className="z-50 fixed left-0 bottom-0 rounded-tr-md px-1.5 py-1 text-black bg-white">
+    <span className="sm:hidden">xs</span>
+    <span className="hidden sm:inline md:hidden">sm</span>
+    <span className="hidden md:inline lg:hidden">md</span>
+    <span className="hidden lg:inline xl:hidden">lg</span>
+    <span className="hidden xl:inline 2xl:hidden">xl</span>
+    <span className="hidden 2xl:inline">2xl</span>
+  </div>
+)
+```
+
+<br />
+<Step number={2} title="How to use" />
+
+{/* at `src/pages/_app.tsx` or `src/app/layout.tsx` or anything else `root` */}
+in the `RootLayout` project file
+
+```jsx {3,11} title="@/app/layout.tsx"
+import '@/styles/globals.css'
+import { Header } from '@/components/Header'
+import { DebugBreakpoint } from '@/components/DebugBreakpoint'
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <Header />
+        {children}
+        {process.env.NODE_ENV === 'development' && <DebugBreakpoint />}
+      </body>
+    </html>
+  )
+}
+```

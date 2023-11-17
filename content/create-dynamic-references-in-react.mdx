@@ -1,0 +1,75 @@
+---
+type: 'snippet'
+title: 'Create dynamic references in React with createRef'
+publishedAt: '2020-01-02T11:11:11.000Z'
+image: '/assets/blog/post/preview.jpg'
+categories: ['Tips and tricks']
+technologies: ['React', 'Next.js']
+---
+
+<Step number={1} title="Create references" />
+
+Use `useRef` to create an array of references. This array is populated with HTML element references using `createRef`.
+
+```jsx {6,13}
+import { createRef, useEffect, useRef } from 'react'
+
+const colors = ['#8be9fd', '#50fa7b', '#ff79c6', '#bd93f9', '#ff5555', '#F1FA8C']
+
+export const Example = () => {
+  const references = useRef(colors.map(() => createRef<HTMLLIElement>()))
+
+  return (
+    <ul className="flex items-center justify-center gap-4">
+      {colors.map((color, index) => (
+        <li
+          key={color}
+          ref={references.current[index]}
+          className="w-8 h-8 rounded list-none"
+          style={{ backgroundColor: color }}
+        />
+      ))}
+    </ul>
+  )
+}
+```
+
+<br />
+<Step number={2} title="How to use" />
+
+I'm using GSAP to animate all <code class='cyan'>references</code>
+
+```jsx {2,9-13} /references.current[squareIndex].current/#cyan /element.current/#cyan
+import { createRef, useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+
+const colors = ['#8be9fd', '#50fa7b', '#ff79c6', '#bd93f9', '#ff5555', '#F1FA8C']
+
+export const Example = () => {
+  const references = useRef(colors.map(() => createRef<HTMLLIElement>()))
+
+  useEffect(() => {
+    references.current.forEach((element, index) => {
+      gsap.to(element.current, { duration: 0.4, y: -128, scale: 1.4, delay: 0.075 * index, repeat: -1, yoyo: true })
+    })
+  }, [])
+
+  return (
+    <ul className="flex items-center justify-center gap-4">
+      {colors.map((color, index) => (
+        <li
+          key={color}
+          ref={references.current[index]}
+          className="w-8 h-8 rounded list-none"
+          style={{ backgroundColor: color }}
+        />
+      ))}
+    </ul>
+  )
+}
+```
+
+<br />
+<Step number={3} title="Output" />
+
+<DynamicReferencesExample />

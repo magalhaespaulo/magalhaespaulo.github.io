@@ -1,0 +1,93 @@
+---
+type: 'snippet'
+title: 'Optimize images with WebP image format'
+publishedAt: '2021-03-13T11:00:00.000Z'
+image: '/assets/blog/post/preview.jpg'
+categories: ['Performance']
+technologies: ['Terminal', 'Web']
+---
+
+<base target="_blank" />
+
+<Step number={1} title="Install" />
+
+Install [WebP encoder tool](https://developers.google.com/speed/webp/download)
+
+```bash
+brew install webp
+```
+
+<br />
+<Step number={2} title="Create script" />
+
+Create `webp.sh` in the same directory
+
+You can edit <code class="cyan">output directory</code> and <code class="cyan">cwebp parameters</code>.
+
+```bash title="~/utils/webp.sh" /compressed/#cyan /-m 6 -q 70 -mt -af -progress/#cyan
+#!/bin/bash
+
+output_directory="compressed"
+params="-m 6 -q 70 -mt -af -progress"
+
+if [ $# -ne 0 ]; then
+  params=$@;
+fi
+
+cd $(pwd)
+
+mkdir -p $output_directory
+
+shopt -s nullglob nocaseglob extglob
+
+for file in *.@(jpg|jpeg|tif|tiff|png); do
+  cwebp $params "$file" -o "./$output_directory/${file%.*}".webp;
+done
+```
+
+##
+
+<br />
+<Step number={3} title="How to use" />
+
+**Run** the `webp.sh` script in the directory containing the images
+
+```bash
+# open the directory containing the images
+cd ~/downloads/images
+# run script
+~/utils/webp.sh
+```
+
+_— I personally created an alias_ 🤓
+
+```bash
+alias webp='~/utils/webp.sh'
+# just type
+webp
+```
+
+<br />
+<Step number={4} title="Output" />
+
+```txt /1140408 bytes/#purple /138734 bytes/#green
+Saving file './compressed/image.webp'
+File:      image.jpg
+Dimension: 2808 x 1872
+Input:     1140408 bytes
+Output:    138734 bytes Y-U-V-All-PSNR 40.69 44.92 47.76   41.87 dB
+           (0.21 bpp)
+block count:   intra4:     10391  (50.46%)
+              intra16:     10201  (49.54%)
+              skipped:       873  (4.24%)
+bytes used:    header:       233  (0.2%)
+           mode-partition: 44567  (32.1%)
+ Residuals bytes  |segment 1|segment 2|segment 3|segment 4|  total
+    macroblocks:  |       3%|      16%|      20%|      61%|   20592
+      quantizer:  |      39 |      38 |      31 |      23 |
+   filter level:  |      24 |      38 |      14 |       8 |
+```
+
+A reduction of ≈ `89.12%` and the resulting visual quality after compression is outstanding.
+
+You should definitely try it! 🤘
