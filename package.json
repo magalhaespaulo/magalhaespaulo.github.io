@@ -8,8 +8,6 @@
     "start": "npx serve@latest out",
     "lint": "next lint",
     "prod": "yarn clean && yarn build && yarn start",
-    "preexport": "yarn clean && yarn build",
-    "export": "next export",
     "clean": "rimraf .next out",
     "prepare": "husky install"
   },
