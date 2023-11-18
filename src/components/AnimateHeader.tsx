@@ -17,7 +17,7 @@ export const AnimateHeader = ({
   return (
     <motion.h2
       ref={viewRef}
-      className="relative mt-12 pb-20 px-3"
+      className="relative mt-12 pb-12 px-3"
       style={{
         translateX: useTransform(scrollYProgress, [0, 1], translateX),
       }}

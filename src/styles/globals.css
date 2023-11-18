@@ -20,7 +20,7 @@ body {
   @apply font-sans;
   color: rgb(var(--primary));
   background-color: rgb(var(--tertiary));
-
+  min-height: 100vh;
   @apply text-base md:text-lg;
 }
 
@@ -70,7 +70,7 @@ body {
 
   .text-res-1 {
     white-space: nowrap;
-    --minFontSize: 34px;
+    --minFontSize: 30px;
     --maxFontSize: 60px;
     --scaler: 5vw;
     font-size: clamp(var(--minFontSize), var(--scaler), var(--maxFontSize));

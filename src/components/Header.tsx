@@ -67,9 +67,7 @@ export const Header = () => {
             href={progress === 0 ? `/#${'hi'}` : ''}
             scroll={false}
             onClick={() =>
-              progress === 0
-                ? goTo('hi')
-                : gsap.to(window, { duration: 1, scrollTo: 'body', ease: 'power1.out' })
+              progress === 0 ? goTo('hi') : gsap.to(window, { duration: 1, scrollTo: 'body', ease: 'power1.out' })
             }
             className="pointer-events-auto flex items-center justify-center font-display"
             aria-label="Home"

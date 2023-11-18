@@ -1,16 +1,67 @@
 'use client'
 
+import { useState } from 'react'
 import { AnimateHeader } from '@/components/AnimateHeader'
 import { type Case, type CaseWithColor, Scene } from '@/components/3d/Scene'
 import { Color } from 'three'
+import { useKeenSlider, type TrackDetails } from 'keen-slider/react'
 
-export const Work = () => (
-  <section id="work" className="relative min-h-screen overflow-hidden">
-    <AnimateHeader translateX={['100%', '25%']}>Selected Work</AnimateHeader>
+export const Work = () => {
+  const [details, setDetails] = useState<TrackDetails | null>(null)
+  const [ref] = useKeenSlider<HTMLUListElement>({
+    loop: true,
+    detailsChanged(s) {
+      setDetails(s.track.details)
+    },
+    initial: 2,
+    slides: {
+      origin: 'center',
+      perView: 1.5,
+      // spacing: 10,
+    },
+  })
 
-    <Scene cases={addColorsToCases(data)} />
-  </section>
-)
+  const scaleStyle = (idx: number) => {
+    if (!details) return {}
+    const slide = details.slides[idx]
+    const scale_size = 0.2
+    const scale = 1 - (scale_size - scale_size * slide.portion)
+    return {
+      transform: `scale(${scale})`,
+      WebkitTransform: `scale(${scale})`,
+    }
+  }
+
+  return (
+    <section id="work" className="relative min-h-screen overflow-hidden">
+      <AnimateHeader translateX={['100%', '25%']}>Selected Work</AnimateHeader>
+
+      <div className="-mt-20 block sm:hidden">
+        <ul ref={ref} className="relative flex overflow-hidden w-full">
+          {addColorsToCases(data).map((item, index) => (
+            <li key={index} className="keen-slider__slide">
+              <div style={{ ...scaleStyle(index) }} className="flex flex-col items-center justify-center">
+                <img
+                  className="rounded-2xl border-4"
+                  style={{ borderColor: item.colorHex }}
+                  src={item.image}
+                  alt={item.title}
+                />
+                <div className="mt-3 text-lg" style={{ color: item.colorHex }}>
+                  {item.title}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="hidden sm:block">
+        <Scene cases={addColorsToCases(data)} />
+      </div>
+    </section>
+  )
+}
 
 const addColorsToCases = (cases: Case[]): CaseWithColor[] => {
   const hexColors = ['#DC3838', '#FECC30', '#0E976B', '#00ACE4', '#7357F0', '#E261D2']

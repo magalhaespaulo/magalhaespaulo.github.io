@@ -187,7 +187,7 @@ const Phones = ({ cases }: { cases: CaseWithColor[] }): JSX.Element => {
                             ·
                           </span>
                         )}
-                        <li className="">{element}</li>
+                        <li>{element}</li>
                       </Fragment>
                     ))}
                   </ul>
